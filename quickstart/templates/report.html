@@ -1,0 +1,51 @@
+{% load utils %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .dept {
+            margin-bottom: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+{% for did, projects in data.items %}
+    <div class="dept">
+        <h3>{{ department_titles | dict_key:did }}</h3>
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th>Январь</th>
+                <th>Февраль</th>
+                <th>Март</th>
+                <th>Апрель</th>
+                <th>Май</th>
+                <th>Июнь</th>
+                <th>Июль</th>
+                <th>Август</th>
+                <th>Сентябрь</th>
+                <th>Октябрь</th>
+                <th>Ноябрь</th>
+                <th>Декабрь</th>
+            </tr>
+            </thead>
+            {% for pid, months in projects.items %}
+                <tr>
+                    <th>{{ project_titles | dict_key:pid }}</th>
+                    {% for val in months %}<td>{{ val }}</td>{% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endfor %}
+</body>
+</html>
