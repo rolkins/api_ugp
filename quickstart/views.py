@@ -40,6 +40,7 @@ class LoadReportView(View):
         tasks = Task.objects.filter(start_date__year__lte=year, end_date__year__gte=year)
         result = {}  # {department_id: {project_id: [...months]}}
         departments = {}
+        data_group = {}
         projects = {}
         for task in tasks:
             if task.months == 0:
@@ -67,12 +68,20 @@ class LoadReportView(View):
         for d in result.values():
             for pid in d:
                 d[pid] = [round(v, 2) for v in d[pid]]
+                
+        for project in Project.objects.all():
+            for group in project.tasks.values('task_type').annotate(min_b=Min('start_date'), max_b=Max('end_date')):
+                if group['min_b'] is None:
+                    continue
+                group['months'] = [group['min_b'].month <= i+1 <= group['max_b'].month for i in range(12)]
+                data_group.setdefault(project.title, []).append(group)
 
         return {
             'department_titles': departments,
             'project_titles': projects,
             'data': result,
             'year': year,
+            'data_group': data_group,
         }
 
     def get(self, request, *args, **kwargs):
