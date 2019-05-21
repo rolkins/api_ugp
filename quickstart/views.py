@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from rest_framework import viewsets
 from quickstart.models import Project, Task, Department, SubTask
 from quickstart.serializers import ProjectSerializer, TaskSerializer, DepartmentSerializer, SubTaskSerializer
+from django.db.models import Min, Max
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
